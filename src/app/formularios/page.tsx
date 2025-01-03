@@ -15,20 +15,22 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { CardTitle } from '@/components/ui/card';
 import BackButton from '@/components/back-button';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback } from 'react';
 import { toast } from 'react-toastify';
+import { DriversService } from '@/services/models/drivers';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { TruckService } from '@/services/models/trucks';
-import { TCreateTruck } from '@/types/trucks';
+import { TCreateDriver } from '@/types/drivers';
+import { ReportService } from '@/services/models/reports';
+import { TCreateReport } from '@/types/reports';
 
 const formSchema = z.object({
-	placa: z.string().min(1, {
+	title: z.string().min(1, {
 		message: 'Campo obrigatório',
 	}),
-	modelo: z.string().min(1, {
+	description: z.string().min(1, {
 		message: 'Campo obrigatório',
 	}),
-	capacidade: z.string().min(1, {
+	image: z.string().min(1, {
 		message: 'Campo obrigatório',
 	}),
 });
@@ -36,59 +38,59 @@ const formSchema = z.object({
 export default function RegisterSquare() {
 	const params = useSearchParams();
 
-	const caminhaoId = params.get('caminhao') || '';
+	const reportId = params.get('report') || '';
 
 	const router = useRouter();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			placa: '',
-			modelo: '',
-			capacidade: '',
+			title: '',
+			description: '',
+			image: '',
 		},
 	});
 
-	const fetchCaminhao = useCallback(async () => {
+	const fetchReport = useCallback(async () => {
 		try {
-			const loadedTruck = await TruckService.getById(caminhaoId);
-			if (!loadedTruck) {
+			const loadedReport = await ReportService.getById(reportId);
+			if (!loadedReport) {
 				throw new Error();
 			}
 
-			form.setValue('placa', loadedTruck?.placa);
-			form.setValue('modelo', loadedTruck?.modelo);
-			form.setValue('capacidade', loadedTruck?.capacidade.toString());
+			form.setValue('title', loadedReport?.title);
+			form.setValue('description', loadedReport?.description);
+			// form.setValue('image', loadedReport?.image);
 
-			return loadedTruck;
+			return loadedReport;
 		} catch (error) {
-			toast.error('Erro ao carregar o caminhão', {
+			toast.error('Erro ao carregar relatório', {
 				toastId: 'error',
 			});
 		}
-	}, [caminhaoId, form]);
+	}, [form, reportId]);
 
 	const {
-		data: caminhao,
+		data: report,
 		isPending,
 		error,
 	} = useQuery({
-		queryKey: ['getCaminhao', caminhaoId],
-		queryFn: fetchCaminhao,
-		enabled: Boolean(caminhaoId),
+		queryKey: ['getReport', reportId],
+		queryFn: fetchReport,
+		enabled: Boolean(reportId),
 	});
 
 	const createMutation = useMutation({
-		mutationFn: (body: TCreateTruck) => {
-			if (caminhaoId) {
-				return TruckService.update(caminhaoId, body);
+		mutationFn: (body: TCreateReport) => {
+			if (reportId) {
+				return ReportService.update(reportId, body);
 			} else {
-				return TruckService.create(body);
+				return ReportService.create(body);
 			}
 		},
 		onSuccess: data => {
-			toast.success(`Caminhão ${caminhaoId ? 'editado' : 'cadastrado'}`);
-			router.push('/caminhoes');
+			toast.success(`Relatório ${reportId ? 'editado' : 'cadastrado'}`);
+			router.push('/');
 		},
 		onError: err => {
 			console.error(err);
@@ -100,11 +102,7 @@ export default function RegisterSquare() {
 
 	const onSubmit = useCallback(
 		(values: z.infer<typeof formSchema>) => {
-			const processedValues = {
-				...values,
-				capacidade: parseFloat(values.capacidade),
-			};
-			createMutation.mutate(processedValues);
+			createMutation.mutate(values);
 		},
 		[createMutation]
 	);
@@ -115,7 +113,7 @@ export default function RegisterSquare() {
 				<div className="w-full flex flex-row gap-5 items-center">
 					<BackButton />
 					<CardTitle className="text-center font-bold text-[#121D31] text-xl md:text-2xl">
-						{caminhaoId ? `Editar caminhão` : 'Cadastrar caminhão'}
+						{reportId ? `Editar Relatório` : 'Cadastrar Relatório'}
 					</CardTitle>
 				</div>
 				<Form {...form}>
@@ -126,13 +124,13 @@ export default function RegisterSquare() {
 						<div className="grid md:grid-cols-2 gap-5">
 							<FormField
 								control={form.control}
-								name="placa"
+								name="title"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Placa *</FormLabel>
+										<FormLabel>Título *</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="Placa do veículo"
+												placeholder="Título do relatório"
 												className="grid-cols-2 md:grid-cols-1"
 												{...field}
 											/>
@@ -143,13 +141,13 @@ export default function RegisterSquare() {
 							/>
 							<FormField
 								control={form.control}
-								name="modelo"
+								name="description"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Modelo *</FormLabel>
+										<FormLabel>Descrição *</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="Modelo do veículo"
+												placeholder="Descrição do relatório"
 												className="grid-cols-2 md:grid-cols-1"
 												{...field}
 											/>
@@ -160,13 +158,13 @@ export default function RegisterSquare() {
 							/>
 							<FormField
 								control={form.control}
-								name="capacidade"
+								name="image"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Capacidade em KG *</FormLabel>
+										<FormLabel>imagem *</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="Capacidade do veículo"
+												type="file"
 												className="grid-cols-2 md:grid-cols-1"
 												{...field}
 											/>
@@ -182,7 +180,7 @@ export default function RegisterSquare() {
 								type="submit"
 								className="w-[300px] bg-green-500 hover:bg-green-600"
 							>
-								Salvar
+								{reportId ? 'Editar' : 'Cadastrar'}
 							</Button>
 						</span>
 					</form>

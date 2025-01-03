@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { FaTruckLoading } from 'react-icons/fa';
+import { MdConstruction } from 'react-icons/md';
 
 export default function Header() {
 	return (
@@ -15,10 +15,12 @@ export default function Header() {
 							<div className="text-white flex justify-between items-center space-x-3 w-full">
 								<h1 className="flex flex-row-reverse items-center gap-3 text-2xl font-noto font-semibold tracking-wide">
 									<div>
-										<p className="text-green-500">Transport</p>
-										<p className="text-yellow-500">Manager</p>
+										<p className="flex flex-row text-green-500">
+											IF<span className="text-yellow-300">raestrutural</span>
+										</p>
+										{/* <p className="text-yellow-500">Estrutural</p> */}
 									</div>
-									<FaTruckLoading size={40} />
+									<MdConstruction size={40} />
 								</h1>
 							</div>
 						</Link>
@@ -26,30 +28,14 @@ export default function Header() {
 						<div className="flex gap-10">
 							<nav className="flex md:flex space-x-8">
 								<ul className="flex justify-center flex-col gap-2 md:flex-row md:justify-end items-center text-lg">
-									<li>
+									{/* <li>
 										<Link
 											href="/"
 											className="text-white hover:text-[#f39c12] transition duration-300 ease-in-out px-3 py-2 rounded-lg hover:bg-[#f39c12] hover:bg-opacity-20"
 										>
 											Dashboard
 										</Link>
-									</li>
-									<li>
-										<Link
-											href="/caminhoes"
-											className="text-white hover:text-[#f39c12] transition duration-300 ease-in-out px-3 py-2 rounded-lg hover:bg-[#f39c12] hover:bg-opacity-20"
-										>
-											Caminhões
-										</Link>
-									</li>
-									<li>
-										<Link
-											href="/motoristas"
-											className="text-white hover:text-[#f39c12] transition duration-300 ease-in-out px-3 py-2 rounded-lg hover:bg-[#f39c12] hover:bg-opacity-20"
-										>
-											Motoristas
-										</Link>
-									</li>
+									</li> */}
 								</ul>
 							</nav>
 						</div>
