@@ -4,7 +4,7 @@ let ENV = {};
 switch (process.env.NEXT_PUBLIC_AMB) {
   case "local": {
     ENV = {
-      baseURL: "http://localhost:8090",//"https://transport-manager-back.vercel.app/", // "http://localhost:8080", //  "http://192.168.0.8:8080", //
+      baseURL: "http://localhost:8081",//"https://transport-manager-back.vercel.app/", // "http://localhost:8080", //  "http://192.168.0.8:8080", //
     };
     break;
   }
