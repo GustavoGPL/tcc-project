@@ -28,6 +28,7 @@ import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
 import { queryClient } from '@/utils/react-query';
 import { SkeletonForm } from '@/components/skeleton-form';
+import { useSession } from 'next-auth/react';
 
 const formSchema = z.object({
 	title: z.string().min(1, {
@@ -43,6 +44,8 @@ const formSchema = z.object({
 
 export default function RegisterSquare() {
 	const params = useSearchParams();
+
+	const { data: session } = useSession();
 
 	const reportId = params.get('report') || '';
 
@@ -120,11 +123,12 @@ export default function RegisterSquare() {
 			const processedValues = {
 				...values,
 				image: imgBase64 ? imgBase64.split(',')[1] : '', // remover da string data:image/jpeg;base64,
+				createdBy: session?.user?.email || '',
 			};
 			createMutation.mutate(processedValues);
 			console.log('Values processed', processedValues);
 		},
-		[createMutation, imgBase64]
+		[createMutation, imgBase64, session?.user?.email]
 	);
 
 	return (

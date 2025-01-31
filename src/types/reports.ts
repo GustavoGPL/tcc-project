@@ -11,5 +11,5 @@ export type TReport = {
 
 export type TCreateReport = Omit<
 	TReport,
-	'_id' | 'createdAt' | 'updatedAt' | 'isActive' | 'createdBy'
+	'_id' | 'createdAt' | 'updatedAt' | 'isActive'
 >;
