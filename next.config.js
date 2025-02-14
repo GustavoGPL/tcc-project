@@ -4,19 +4,19 @@ let ENV = {};
 switch (process.env.NEXT_PUBLIC_AMB) {
   case "local": {
     ENV = {
-      baseURL: "http://localhost:8081",//"https://transport-manager-back.vercel.app/", // "http://localhost:8080", //  "http://192.168.0.8:8080", //
+      baseURL: "http://localhost:8081",
     };
     break;
   }
   case "dev": {
     ENV = {
-        baseURL: "https://transport-manager-back.vercel.app/", // "https://estock-backend-440615.rj.r.appspot.com",
+      baseURL: "http://localhost:8081",
     };
     break;
   }
   default:
     ENV = {
-        baseURL: "https://transport-manager-back.vercel.app/",
+      baseURL: "http://localhost:8081",
     };
 }
 

@@ -1,15 +1,7 @@
 'use client';
-
-import { Card } from '@/components/ui/card';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { DeliveriesService } from '@/services/models/deliveries';
 import Dashboard from './components/dashboard';
-import { ValorDiario } from './components/valorDiario';
-import { TotalEntregas } from './components/totalEntregas';
-import { TruckService } from '@/services/models/trucks';
 import { queryClient } from '@/utils/react-query';
-import { useEffect, useState } from 'react';
-import DynamicPagination from '@/components/dynamic-pagination';
 import { toast } from 'react-toastify';
 import { ReportService } from '@/services/models/reports';
 
@@ -53,22 +45,12 @@ const Home = () => {
 	return (
 		<div className="defaultPage">
 			<div className="secondaryDiv">
-				{/* <div className="flex flex-row gap-5 items-center">
-					<h3 className="text-3xl font-bold text-gray-800">Relatórios</h3>
-				</div> */}
-				{/* <Card> */}
 				<Dashboard
 					reports={data || []}
 					isFetching={isFetching}
 					onFinish={handleFinish}
 					onDelete={handleDelete}
 				/>
-				{/* </Card> */}
-				{/* <DynamicPagination
-					page={currentPage}
-					setPage={setCurrentPage}
-					totalPages={totalPages}
-				/> */}
 			</div>
 		</div>
 	);

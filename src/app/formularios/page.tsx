@@ -17,12 +17,9 @@ import { CardTitle } from '@/components/ui/card';
 import BackButton from '@/components/back-button';
 import { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
-import { DriversService } from '@/services/models/drivers';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { TCreateDriver } from '@/types/drivers';
 import { ReportService } from '@/services/models/reports';
 import { TCreateReport } from '@/types/reports';
-import { Label } from '@/components/ui/label';
 import { convertToBase64 } from '@/utils/functions';
 import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
@@ -37,9 +34,6 @@ const formSchema = z.object({
 	description: z.string().min(1, {
 		message: 'Campo obrigatório',
 	}),
-	// image: z.string().min(1, {
-	// 	message: 'Campo obrigatório',
-	// }),
 });
 
 export default function RegisterSquare() {
@@ -58,7 +52,6 @@ export default function RegisterSquare() {
 		defaultValues: {
 			title: '',
 			description: '',
-			// image: '',
 		},
 	});
 
@@ -71,11 +64,6 @@ export default function RegisterSquare() {
 
 			form.setValue('title', loadedReport?.title);
 			form.setValue('description', loadedReport?.description);
-
-			// if (loadedReport.image) {
-			// 	setImgBase64(loadedReport.image);
-			// }
-			// form.setValue('image', loadedReport?.image);
 
 			return loadedReport;
 		} catch (error) {
